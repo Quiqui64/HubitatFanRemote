@@ -22,7 +22,7 @@ metadata {
         capability "Actuator"
     }
         preferences {
-        input(name: "url", type: "string", title:"url", description: "The URL, include forward slash.", defaultValue: "http://192.168.1.4/fan", displayDuringSetup: true)
+        input(name: "url", type: "string", title:"url", description: "The URL, include forward slash.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
 	}  
 }
