@@ -26,12 +26,11 @@ Software.
 3. IRremoteESP8266 https://github.com/crankyoldgit/IRremoteESP8266
 4. Open a new sketch in the Arduino IDE cut and paste the fan.ino file https://github.com/Quiqui64/HubitatFanRemote/blob/master/fan.ino
 5.  Add you ssid and password to sketch.
-6. Edit line 30 through line 69 with the IR codes that correspond with the dip switches on your remote from one of the files above.
-7. Upload the sketch to the ESP8266 and note the IP address in the serial monitor.
-8. Add these two drivers to Hubitat and creat a virtual fan and light                        https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayLight.groovy
+6. Upload the sketch to the ESP8266 and note the IP address in the serial monitor.
+7. Add these two drivers to Hubitat and creat a virtual fan and light                        https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayLight.groovy
  https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayFan.groovy
  Here are instructions how to add a custom driver to Hubitat https://docs.hubitat.com/index.php?title=How_to_Install_Custom_Drivers
-9. Then on your devices under Preferences add your IP address.
+8. Then on your devices under Preferences add your IP address and dip switch settings. i.e. http://192.168.1.4/1010 the last for digits are your dip switch settings i.e. Up,Down,Up,Down = 1010.
 
 
 Website to look up FCC ID https://www.fcc.gov/oet/ea/fccid
