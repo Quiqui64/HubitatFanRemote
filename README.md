@@ -24,8 +24,8 @@ Software.
 1. Arduino IDE https://www.arduino.cc/en/main/software
 2. ESP8266 Library https://randomnerdtutorials.com/how-to-install-esp8266-board-arduino-ide/
 3. IRremoteESP8266 https://github.com/crankyoldgit/IRremoteESP8266
-4. Open a new sketch in the Arduino IDE cut and paste the fan.ino file https://github.com/Quiqui64/HubitatFanRemote/blob/master/fan.ino
-5.  Add you ssid and password to sketch.
+4. Download the fan.ino file, open it with the Ardunio IDE.
+5. Add you ssid and password to sketch.
 6. Upload the sketch to the ESP8266 and note the IP address in the serial monitor.
 7. Add these two drivers to Hubitat and creat a virtual fan and light                        https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayLight.groovy
  https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayFan.groovy
