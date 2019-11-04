@@ -20,8 +20,8 @@
 #include <IRsend.h> // For RF Tansmitter
 
 ESP8266WebServer server;
-const char* ssid = ""; // your router login mame
-const char* password = ""; // your router password
+const char* ssid = "Casa"; // your router login mame
+const char* password = "brownclan"; // your router password
 const uint16_t kIrLed = 12;  // ESP8266 GPIO pin 12 (D6) output.
 IRsend irsend(kIrLed);  // Set the GPIO to be used to sending the message.
 const int IRrepeat = 30; // Number times to transmit signal
@@ -104,7 +104,7 @@ void setFan()
     fanSpeed = newFanSpeed;
     lastFanSpeed = newFanSpeed;
   }
-  else if((newFanSpeed == "on") || (newFanSpeed == "same")){
+  else if(newFanSpeed == "on"){
     fanSpeed = lastFanSpeed;
   }
   else if(newFanSpeed == "off"){
@@ -115,7 +115,7 @@ void setFan()
     lightState = newLightState;
     lastLightState = newLightState;
   }
-  else if((newLightState == "on") || (newLightState == "same")){
+  else if(newLightState == "on"){
     lightState = lastLightState;
   }
   else if(newLightState == "off"){
