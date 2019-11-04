@@ -13,6 +13,7 @@ Parts that you are going to need are.
 You will have to unsolder the 315Mhz SAW that comes with the circuit board and solder on the 303.875Mhz SAW.
 
 Wire IAW drawing below, if you want you cut a piece of wire approximately 9.25 inches for an antenna
+https://github.com/Quiqui64/HubitatFanRemote/blob/master/Fan_bb.jpg
 
 
 
