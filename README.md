@@ -4,6 +4,9 @@ First of all, I am not a programmer use at your own risk.
 
 If you need the codes for different dip switch settings let me know and when I have time I will upload them. Also if see ways to improve the code let me know.
 
+As of now i have added the following dip switch settings.
+0001, 1011, 1100, 1110, 1111.
+
 This provides a way to control your Hampton Bay/ Harbour Breeze fans with Hubitat as of right now it only works with RF fan controls that this remote FCC ID: CHQ8BT7096T  my remotes did not have the forward/reverse button so I did not record those commands. If your controller has this chip https://www.radiolocman.com/datasheet/data.html?di=71835&/HT48R31-28SDIP-B-0 this setup may work for you.
 
 Parts that you are going to need are.
