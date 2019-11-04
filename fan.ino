@@ -43,7 +43,11 @@ void setup()
   Serial.println("");
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
+  server.on("/0000",set0000);
   server.on("/0001",set0001);
+  server.on("/0010",set0010);
+  server.on("/0011",set0011);
+  server.on("/0100",set0100);
   server.on("/1011",set1011);
   server.on("/1100",set1100);
   server.on("/1110",set1110);
@@ -54,6 +58,252 @@ void setup()
 void loop()
 {
   server.handleClient();
+}
+
+void set0000()
+{  
+//FAN CHQ8BT7096T DIP SWITCHES DN,DN,DN,DN OR 0000
+static uint16_t lightOffFanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,662,330,662,330,10028};
+static uint16_t lightOffFanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,10020};
+static uint16_t lightOffFanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,10043};
+static uint16_t lightOffFanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,10046};
+static uint16_t light20FanOff[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,10047};
+static uint16_t light20FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,10032};
+static uint16_t light20FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,10047};
+static uint16_t light20FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,662,331,662,331,331,662,10047};
+static uint16_t light30FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,10034};
+static uint16_t light30FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,662,331,331,662,331,662,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,662,331,10049};
+static uint16_t light30FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,10045};
+static uint16_t light30FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,10030};
+static uint16_t light40FanOff[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,331,662,331,662,331,662,331,662,662,331,331,662,10041};
+static uint16_t light40FanLow[44] = {331,331,661,331,661,331,661,661,331,661,331,661,331,661,331,331,661,331,661,661,331,661,331,661,331,661,331,661,331,661,331,661,331,331,661,331,661,661,331,331,661,661,331,10052};
+static uint16_t light40FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,331,662,331,662,10047};
+static uint16_t light40FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,662,331,331,662,331,662,331,662,662,331,662,331,10053};
+static uint16_t light50FanOff[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,331,662,331,662,662,331,662,331,331,662,662,331,10043};
+static uint16_t light50FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,10036};
+static uint16_t light50FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,662,331,662,331,662,331,10055};
+static uint16_t light50FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,331,662,662,331,662,331,662,331,331,662,10052};
+static uint16_t light60FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,330,662,662,330,330,662,330,662,330,662,10043};
+static uint16_t light60FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,662,331,662,331,331,662,662,331,331,662,662,331,662,331,10034};
+static uint16_t light60FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,331,662,662,331,331,662,10047};
+static uint16_t light60FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,10039};
+static uint16_t light70FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,10036};
+static uint16_t light70FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,662,330,662,330,330,662,10047};
+static uint16_t light70FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,330,662,330,662,330,662,662,330,330,662,662,330,10028};
+static uint16_t light70FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,10036};
+static uint16_t light80FanOff[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,10032};
+static uint16_t light80FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,10029};
+static uint16_t light80FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,10038};
+static uint16_t light80FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,662,331,331,662,662,331,662,331,662,331,331,662,10054};
+static uint16_t light90FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,10042};
+static uint16_t light90FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,662,331,662,331,331,662,331,662,331,662,331,662,662,331,662,331,331,662,662,331,662,331,331,662,662,331,331,662,662,331,662,331,10058};
+static uint16_t light90FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,10047};
+static uint16_t light90FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,10030};
+static uint16_t light100FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,663,330,10036};
+static uint16_t light100FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,662,330,330,662,330,662,662,330,662,330,330,662,10038};
+static uint16_t light100FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,10051};
+static uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,10030};
+
+  static String fanSpeed = "off";
+  static String lightState = "off";
+  static String lastFanSpeed = "off";
+  static String lastLightState = "off";  
+  String newFanSpeed = server.arg("fanSpeed");
+  String newLightState = server.arg("lightState");
+
+  if((newFanSpeed != "same") && (newFanSpeed != "off") && (newFanSpeed != "on")){
+    fanSpeed = newFanSpeed;
+    lastFanSpeed = newFanSpeed;
+  }
+  else if(newFanSpeed == "on"){
+    fanSpeed = lastFanSpeed;
+  }
+  else if(newFanSpeed == "off"){
+    fanSpeed = "off";
+  }
+  
+  if((newLightState != "same") && (newLightState != "off") && (newLightState != "on")){
+    lightState = newLightState;
+    lastLightState = newLightState;
+  }
+  else if(newLightState == "on"){
+    lightState = lastLightState;
+  }
+  else if(newLightState == "off"){
+    lightState = "off";
+  }  
+  server.send(204,"");
+ 
+  if (lightState == "off") { 
+     for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(lightOffFanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(lightOffFanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(lightOffFanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(lightOffFanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+    }
+  else if (lightState == "20") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light20FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light20FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light20FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light20FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "30") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light30FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light30FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light30FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light30FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "40") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light40FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light40FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light40FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light40FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "50") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light50FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light50FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light50FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light50FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "60") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light60FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light60FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light60FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light60FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "70") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light70FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light70FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light70FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light70FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "80") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light80FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light80FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light80FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light80FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "90") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light90FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light90FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light90FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light90FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "100") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light100FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light100FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light100FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light100FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
 }
 
 void set0001()
@@ -100,6 +350,744 @@ uint16_t light100FanOff[44] = {330,330,663,330,663,330,663,330,663,663,330,663,3
 uint16_t light100FanLow[44] = {330,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,663,330,330,663,663,330,10035};
 uint16_t light100FanMed[44] = {330,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,10033};
 uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,663,330,663,330,10035};
+
+  static String fanSpeed = "off";
+  static String lightState = "off";
+  static String lastFanSpeed = "off";
+  static String lastLightState = "off";  
+  String newFanSpeed = server.arg("fanSpeed");
+  String newLightState = server.arg("lightState");
+
+  if((newFanSpeed != "same") && (newFanSpeed != "off") && (newFanSpeed != "on")){
+    fanSpeed = newFanSpeed;
+    lastFanSpeed = newFanSpeed;
+  }
+  else if(newFanSpeed == "on"){
+    fanSpeed = lastFanSpeed;
+  }
+  else if(newFanSpeed == "off"){
+    fanSpeed = "off";
+  }
+  
+  if((newLightState != "same") && (newLightState != "off") && (newLightState != "on")){
+    lightState = newLightState;
+    lastLightState = newLightState;
+  }
+  else if(newLightState == "on"){
+    lightState = lastLightState;
+  }
+  else if(newLightState == "off"){
+    lightState = "off";
+  }  
+  server.send(204,"");
+ 
+  if (lightState == "off") { 
+     for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(lightOffFanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(lightOffFanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(lightOffFanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(lightOffFanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+    }
+  else if (lightState == "20") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light20FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light20FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light20FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light20FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "30") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light30FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light30FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light30FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light30FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "40") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light40FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light40FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light40FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light40FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "50") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light50FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light50FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light50FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light50FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "60") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light60FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light60FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light60FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light60FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "70") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light70FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light70FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light70FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light70FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "80") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light80FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light80FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light80FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light80FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "90") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light90FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light90FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light90FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light90FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "100") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light100FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light100FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light100FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light100FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+}
+
+void set0010()
+{  
+//FAN CHQ8BT7096T DIP SWITCHES DN,DN,UP,DN OR 0010
+static uint16_t lightOffFanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,10051};
+static uint16_t lightOffFanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,662,330,662,330,330,662,10038};
+static uint16_t lightOffFanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,663,330,663,330,330,663,663,330,10057};
+static uint16_t lightOffFanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,10047};
+static uint16_t light20FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,662,330,330,662,330,662,662,330,10038};
+static uint16_t light20FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,662,331,662,331,331,662,662,331,662,331,331,662,331,662,10040};
+static uint16_t light20FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,662,331,331,662,331,662,662,331,331,662,662,331,662,331,10036};
+static uint16_t light20FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,10041};
+static uint16_t light30FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,10036};
+static uint16_t light30FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,331,662,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,10038};
+static uint16_t light30FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,662,330,662,330,330,662,10032};
+static uint16_t light30FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,662,330,330,662,330,662,662,330,330,662,662,330,10032};
+static uint16_t light40FanOff[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,662,331,662,331,331,662,10045};
+static uint16_t light40FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,662,331,662,331,331,662,331,662,331,662,331,662,662,331,10047};
+static uint16_t light40FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,662,330,662,330,662,330,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,10032};
+static uint16_t light40FanHigh[44] = {331,331,661,331,661,331,661,661,331,661,331,331,661,661,331,331,661,331,661,661,331,661,331,661,331,661,331,661,331,331,661,661,331,331,661,661,331,661,331,661,331,661,331,10094};
+static uint16_t light50FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,662,330,330,662,330,662,662,330,10045};
+static uint16_t light50FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,662,331,331,662,662,331,662,331,331,662,331,662,10038};
+static uint16_t light50FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,331,662,662,331,662,331,10038};
+static uint16_t light50FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,10036};
+static uint16_t light60FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,10041};
+static uint16_t light60FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,10047};
+static uint16_t light60FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,662,330,330,662,10032};
+static uint16_t light60FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,10038};
+static uint16_t light70FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,662,330,662,330,10038};
+static uint16_t light70FanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,10042};
+static uint16_t light70FanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,10034};
+static uint16_t light70FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,10042};
+static uint16_t light80FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,330,662,662,330,10038};
+static uint16_t light80FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,662,331,662,331,331,662,662,331,662,331,331,662,331,662,10051};
+static uint16_t light80FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,662,331,331,662,331,662,662,331,331,662,662,331,662,331,10044};
+static uint16_t light80FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,10034};
+static uint16_t light90FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,10030};
+static uint16_t light90FanLow[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,662,331,331,662,331,662,331,662,331,662,662,331,662,331,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,10033};
+static uint16_t light90FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,662,330,662,330,330,662,10044};
+static uint16_t light90FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,662,330,330,662,330,662,662,330,330,662,662,330,10042};
+static uint16_t light100FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,330,662,330,662,330,662,662,330,662,330,662,330,662,330,10044};
+static uint16_t light100FanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,663,330,330,663,10049};
+static uint16_t light100FanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,663,330,10042};
+static uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,10046};
+
+  static String fanSpeed = "off";
+  static String lightState = "off";
+  static String lastFanSpeed = "off";
+  static String lastLightState = "off";  
+  String newFanSpeed = server.arg("fanSpeed");
+  String newLightState = server.arg("lightState");
+
+  if((newFanSpeed != "same") && (newFanSpeed != "off") && (newFanSpeed != "on")){
+    fanSpeed = newFanSpeed;
+    lastFanSpeed = newFanSpeed;
+  }
+  else if(newFanSpeed == "on"){
+    fanSpeed = lastFanSpeed;
+  }
+  else if(newFanSpeed == "off"){
+    fanSpeed = "off";
+  }
+  
+  if((newLightState != "same") && (newLightState != "off") && (newLightState != "on")){
+    lightState = newLightState;
+    lastLightState = newLightState;
+  }
+  else if(newLightState == "on"){
+    lightState = lastLightState;
+  }
+  else if(newLightState == "off"){
+    lightState = "off";
+  }  
+  server.send(204,"");
+ 
+  if (lightState == "off") { 
+     for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(lightOffFanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(lightOffFanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(lightOffFanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(lightOffFanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+    }
+  else if (lightState == "20") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light20FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light20FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light20FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light20FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "30") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light30FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light30FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light30FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light30FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "40") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light40FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light40FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light40FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light40FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "50") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light50FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light50FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light50FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light50FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "60") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light60FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light60FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light60FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light60FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "70") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light70FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light70FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light70FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light70FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "80") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light80FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light80FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light80FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light80FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "90") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light90FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light90FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light90FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light90FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "100") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light100FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light100FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light100FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light100FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+}
+
+void set0011()
+{  
+//FAN CHQ8BT7096T DIP SWITCHES DN,DN,UP,UP OR 0011
+static uint16_t lightOffFanOff[44] = {329,329,663,329,663,329,663,663,329,663,329,329,663,329,663,329,663,329,663,329,663,329,663,329,663,329,663,329,663,329,663,329,663,329,663,663,329,329,663,329,663,663,329,10036};
+static uint16_t lightOffFanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,663,330,330,663,330,663,10044};
+static uint16_t lightOffFanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,663,330,663,330,10042};
+static uint16_t lightOffFanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,10042};
+static uint16_t light20FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,662,330,662,330,10038};
+static uint16_t light20FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,662,330,662,330,330,662,662,330,330,662,662,330,330,662,10044};
+static uint16_t light20FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,662,330,330,662,330,662,662,330,330,662,330,662,662,330,10040};
+static uint16_t light20FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,10043};
+static uint16_t light30FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,10038};
+static uint16_t light30FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,662,330,330,662,330,662,662,330,330,662,662,330,10045};
+static uint16_t light30FanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,663,330,330,663,330,663,10030};
+static uint16_t light30FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,663,330,330,663,330,663,330,663,663,330,663,330,10045};
+static uint16_t light40FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,662,330,662,330,662,330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,10032};
+static uint16_t light40FanLow[44] = {331,331,661,331,661,331,661,661,331,661,331,331,661,331,661,331,661,331,661,661,331,661,331,661,331,661,331,661,331,661,331,661,331,331,661,661,331,661,331,661,331,661,331,10088};
+static uint16_t light40FanMed[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,331,662,331,662,331,662,662,331,662,331,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,662,331,331,662,10036};
+static uint16_t light40FanHigh[44] = {331,331,662,331,662,331,662,662,331,662,331,331,662,331,662,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,662,331,331,662,662,331,662,331,331,662,662,331,10047};
+static uint16_t light50FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,330,662,662,330,662,330,662,330,10034};
+static uint16_t light50FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,10043};
+static uint16_t light50FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,10042};
+static uint16_t light50FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,10049};
+static uint16_t light60FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,10032};
+static uint16_t light60FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,330,662,662,330,330,662,662,330,662,330,662,330,330,662,330,662,662,330,330,662,662,330,10042};
+static uint16_t light60FanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,10036};
+static uint16_t light60FanHigh[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,330,662,662,330,662,330,10043};
+static uint16_t light70FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,10047};
+static uint16_t light70FanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,10055};
+static uint16_t light70FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,330,662,330,662,662,330,662,330,662,330,662,330,10034};
+static uint16_t light70FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,663,330,330,663,10045};
+static uint16_t light80FanOff[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,662,330,10034};
+static uint16_t light80FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,662,330,330,662,662,330,662,330,662,330,662,330,330,662,662,330,330,662,662,330,330,662,10036};
+static uint16_t light80FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,662,330,330,662,662,330,662,330,662,330,330,662,330,662,662,330,330,662,330,662,662,330,10038};
+static uint16_t light80FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,10044};
+static uint16_t light90FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,10029};
+static uint16_t light90FanLow[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,662,330,330,662,330,662,662,330,330,662,662,330,10042};
+static uint16_t light90FanMed[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,663,330,330,663,330,663,10034};
+static uint16_t light90FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,663,330,663,330,10038};
+static uint16_t light100FanOff[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,10034};
+static uint16_t light100FanLow[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,10051};
+static uint16_t light100FanMed[44] = {330,330,662,330,662,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,662,330,662,330,662,330,662,330,10031};
+static uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,663,330,330,663,10025};
+
+  static String fanSpeed = "off";
+  static String lightState = "off";
+  static String lastFanSpeed = "off";
+  static String lastLightState = "off";  
+  String newFanSpeed = server.arg("fanSpeed");
+  String newLightState = server.arg("lightState");
+
+  if((newFanSpeed != "same") && (newFanSpeed != "off") && (newFanSpeed != "on")){
+    fanSpeed = newFanSpeed;
+    lastFanSpeed = newFanSpeed;
+  }
+  else if(newFanSpeed == "on"){
+    fanSpeed = lastFanSpeed;
+  }
+  else if(newFanSpeed == "off"){
+    fanSpeed = "off";
+  }
+  
+  if((newLightState != "same") && (newLightState != "off") && (newLightState != "on")){
+    lightState = newLightState;
+    lastLightState = newLightState;
+  }
+  else if(newLightState == "on"){
+    lightState = lastLightState;
+  }
+  else if(newLightState == "off"){
+    lightState = "off";
+  }  
+  server.send(204,"");
+ 
+  if (lightState == "off") { 
+     for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(lightOffFanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(lightOffFanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(lightOffFanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(lightOffFanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+    }
+  else if (lightState == "20") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light20FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light20FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light20FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light20FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "30") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light30FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light30FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light30FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light30FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "40") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light40FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light40FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light40FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light40FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "50") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light50FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light50FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light50FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light50FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "60") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light60FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light60FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light60FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light60FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "70") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light70FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light70FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light70FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light70FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "80") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light80FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light80FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light80FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light80FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "90") {
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light90FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light90FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light90FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light90FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+  else if (lightState == "100") { 
+      for (int i = 0; i <= IRrepeat; i++) {
+        yield();
+        if(fanSpeed == "off"){
+            irsend.sendRaw(light100FanOff, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "low"){
+            irsend.sendRaw(light100FanLow, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "med"){
+            irsend.sendRaw(light100FanMed, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+        else if(fanSpeed == "high"){
+            irsend.sendRaw(light100FanHigh, 44, 38);  // Send a raw data capture at 38kHz.
+        }
+      }    
+  }
+}
+
+void set0100()
+{  
+//FAN CHQ8BT7096T DIP SWITCHES DN,UP,DN,DN OR 0100
+static uint16_t lightOffFanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,663,330,10044};
+static uint16_t lightOffFanLow[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,663,330,330,663,10040};
+static uint16_t lightOffFanMed[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,663,330,10031};
+static uint16_t lightOffFanHigh[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,10051};
+static uint16_t light20FanOff[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,330,662,662,330,10036};
+static uint16_t light20FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,662,330,662,330,330,662,662,330,330,662,330,662,330,662,10042};
+static uint16_t light20FanMed[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,662,331,662,331,331,662,331,662,331,662,662,331,662,331,662,331,10038};
+static uint16_t light20FanHigh[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,662,330,330,662,330,662,662,330,330,662,662,330,330,662,330,662,662,330,662,330,330,662,10029};
+static uint16_t light30FanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,10053};
+static uint16_t light30FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,662,330,330,662,330,662,330,662,662,330,662,330,10036};
+static uint16_t light30FanMed[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,330,663,10036};
+static uint16_t light30FanHigh[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,10034};
+static uint16_t light40FanOff[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,331,662,331,662,662,331,331,662,662,331,331,662,10038};
+static uint16_t light40FanLow[44] = {331,331,661,331,661,331,661,661,331,331,661,661,331,661,331,331,661,331,661,661,331,661,331,661,331,661,331,661,331,661,331,661,331,331,661,661,331,661,331,331,661,661,331,10062};
+static uint16_t light40FanMed[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,662,331,331,662,331,662,662,331,662,331,331,662,331,662,10044};
+static uint16_t light40FanHigh[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,662,331,662,331,662,331,662,331,331,662,662,331,331,662,662,331,331,662,662,331,662,331,10038};
+static uint16_t light50FanOff[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,330,662,330,662,662,330,330,662,662,330,10040};
+static uint16_t light50FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,330,662,330,662,10034};
+static uint16_t light50FanMed[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,662,331,331,662,662,331,331,662,662,331,331,662,331,662,331,662,662,331,662,331,662,331,10034};
+static uint16_t light50FanHigh[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,330,662,330,662,662,330,662,330,330,662,10034};
+static uint16_t light60FanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,10038};
+static uint16_t light60FanLow[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,662,331,331,662,662,331,331,662,662,331,662,331,662,331,331,662,331,662,331,662,662,331,662,331,10036};
+static uint16_t light60FanMed[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,330,662,10045};
+static uint16_t light60FanHigh[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,330,662,662,330,330,662,662,330,330,662,662,330,330,662,330,662,330,662,330,662,662,330,10041};
+static uint16_t light70FanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,10036};
+static uint16_t light70FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,662,330,662,330,330,662,10031};
+static uint16_t light70FanMed[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,662,330,330,662,330,662,330,662,330,662,662,330,330,662,330,662,662,330,662,330,330,662,662,330,10045};
+static uint16_t light70FanHigh[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,10034};
+static uint16_t light80FanOff[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,330,662,662,330,10049};
+static uint16_t light80FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,662,330,662,330,330,662,662,330,330,662,330,662,330,662,10045};
+static uint16_t light80FanMed[44] = {331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,331,662,331,662,331,662,662,331,331,662,662,331,662,331,662,331,331,662,331,662,331,662,662,331,662,331,662,331,10040};
+static uint16_t light80FanHigh[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,662,330,330,662,330,662,662,330,662,330,330,662,10034};
+static uint16_t light90FanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,10038};
+static uint16_t light90FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,662,330,662,330,330,662,662,330,662,330,330,662,330,662,330,662,662,330,662,330,10038};
+static uint16_t light90FanMed[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,663,330,330,663,10034};
+static uint16_t light90FanHigh[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,663,330,10032};
+static uint16_t light100FanOff[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,10034};
+static uint16_t light100FanLow[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,662,330,330,662,662,330,662,330,662,330,330,662,10043};
+static uint16_t light100FanMed[44] = {330,330,662,330,662,330,662,662,330,330,662,662,330,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,662,330,330,662,330,662,662,330,662,330,330,662,662,330,10030};
+static uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,330,663,330,663,10043};
 
   static String fanSpeed = "off";
   static String lightState = "off";
@@ -1289,4 +2277,3 @@ static uint16_t light100FanHigh[44] = {330,330,663,330,663,330,663,330,663,330,6
       }    
   }
 }
-
