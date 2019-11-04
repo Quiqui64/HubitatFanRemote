@@ -1,4 +1,6 @@
 # HubitatFanRemote
+Control Hampton Bay/Harbor Breeze fans with a esp8266
+
 First of all, I am not a programmer use at your own risk.
 
 This provides a way to control your Hampton Bay/ Harbour Breeze fans with Hubitat as of right now it only works with RF fan controls that this remote FCC ID: CHQ8BT7096T  my remotes did not have the forward/reverse button so I did not record those commands. If your controller has this chip https://www.radiolocman.com/datasheet/data.html?di=71835&/HT48R31-28SDIP-B-0 this setup may work for you.
