@@ -20,8 +20,8 @@
 #include <IRsend.h> // For RF Tansmitter
 
 ESP8266WebServer server;
-const char* ssid = "Casa"; // your router login mame
-const char* password = "brownclan"; // your router password
+const char* ssid = ""; // your router login mame
+const char* password = ""; // your router password
 const uint16_t kIrLed = 12;  // ESP8266 GPIO pin 12 (D6) output.
 IRsend irsend(kIrLed);  // Set the GPIO to be used to sending the message.
 const int IRrepeat = 30; // Number times to transmit signal
