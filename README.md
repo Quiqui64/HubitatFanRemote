@@ -1,4 +1,3 @@
-//# HubitatFanRemote# Control Hampton Bay/Harbor Breeze fans with a esp8266
 # Control Hampton Bay/Harbor Breeze fans with a ESP8266
 
 First of all, I am not a programmer use at your own risk.
