@@ -17,9 +17,20 @@ Wire IAW drawing below, if you want you cut a piece of wire approximately 9.25 i
 https://github.com/Quiqui64/HubitatFanRemote/blob/master/Fan_bb.jpg
 
 
+Software.
 
+1. Arduino IDE https://www.arduino.cc/en/main/software
+2. ESP8266 Library https://randomnerdtutorials.com/how-to-install-esp8266-board-arduino-ide/
+3. IRremoteESP8266 https://github.com/crankyoldgit/IRremoteESP8266
+4. Open a new sketch in the Arduino IDE cut and paste the fan.ino file https://github.com/Quiqui64/HubitatFanRemote/blob/master/fan.ino
+5.  Add you ssid and password to sketch.
+6. Edit line 30 through line 69 with the IR codes that correspond with the dip switches on your remote from one of the files above.
+7. Upload the sketch to the ESP8266 and note the IP address in the serial monitor.
+8. Add these two drivers to Hubitat and creat a virtual fan and light                        https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayLight.groovy
+ https://github.com/Quiqui64/HubitatFanRemote/blob/master/VirtualHamptonBayFan.groovy
+ Here are instructions how to add a custom driver to Hubitat https://docs.hubitat.com/index.php?title=How_to_Install_Custom_Drivers
+9. Then on your devices under Preferences add your IP address.
 
-Control Hampton Bay/Harbor Breeze  fans with a esp8266
 
 Website to look up FCC ID https://www.fcc.gov/oet/ea/fccid
 
