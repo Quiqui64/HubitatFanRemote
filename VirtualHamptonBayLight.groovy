@@ -15,21 +15,33 @@
  */
 
 metadata {
-    definition (name: "Virtual Hampton Bay Light", namespace: "Jason", author: "Jason Brown") {
+    definition (name: "Virtual Hampton Bay Light G1", namespace: "Jason", author: "Jason Brown") {
 		capability "Light"
         capability "Switch"
         capability "Switch Level"
         capability "Actuator"
     }
         preferences {
-        input(name: "url", type: "string", title:"url", description: "The URL, include forward slash.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
+        input(name: "url", type: "string", title:"url", description: "IP Address and Dip Switch Settings.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
 	}  
 }
 def lastLightLevel = 0
 
+
+
 def on(){
-    runCmd("on")
+    if (logEnable) log.debug "currentLevel >> value: $device.currentValue("level")"
+        def presetLevel = device.currentValue("level")
+        def presetLevelString = (presetLevel as String)
+
+    if(presetLevelString == "0"){
+        runCmd("100")
+        sendEvent(name: "level", value: "100")
+    }
+    else{
+        runCmd(presetLevelString)
+    }
 	sendEvent(name: "switch", value: "on")
     }
 
@@ -39,7 +51,7 @@ def off(){
     }
 
 def setLevel(value) {
-    lastLightLevel = value
+//    lastLightLevel = value
 	if (logEnable) log.debug "setLevel >> value: $value"
 	def level = Math.max(Math.min(value as Integer, 100), 0)
 	if (level > 0) {
