@@ -22,7 +22,7 @@ metadata {
 
     }
         preferences {
-        input(name: "url", type: "string", title:"url", description: "The URL, include forward slash.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
+        input(name: "url", type: "string", title:"url", description: "IP Address and Dip Switch Settings.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
 	}  
 }
@@ -56,7 +56,17 @@ def setSpeed(speed){
 }
 
 def on(){
-    runCmd("on")
+//    runCmd("on")
+    def presetSpeed = device.currentValue("speed")
+    log.debug ("presetSpeed")
+    log.debug (presetSpeed)
+    if(presetSpeed == "off"){
+        runCmd("high")
+        sendEvent(name: "speed", value: "high", isStateChange: true)
+    }
+    else{
+        runCmd(presetSpeed)
+    }
 	sendEvent(name: "switch", value: "on", isStateChange: true)
     }
 
