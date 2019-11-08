@@ -16,101 +16,109 @@
 
 metadata {
     definition (name: "Virtual Hampton Bay Light G1", namespace: "Jason", author: "Jason Brown") {
-		capability "Light"
+        capability "Actuator"
+        capability "Sensor"
         capability "Switch"
         capability "Switch Level"
-        capability "Actuator"
     }
-        preferences {
+
+    preferences {
         input(name: "url", type: "string", title:"url", description: "IP Address and Dip Switch Settings.", defaultValue: "http://192.168.1.4/1010", displayDuringSetup: true)
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
-	}  
+    }
 }
-def lastLightLevel = 0
 
+def parse(String description) {
+}
 
+def on() {
+    log.trace "Executing 'on'"
+    turnOn()
+}
 
-def on(){
-    if (logEnable) log.debug "currentLevel >> value: $device.currentValue("level")"
-        def presetLevel = device.currentValue("level")
-        def presetLevelString = (presetLevel as String)
-
-    if(presetLevelString == "0"){
-        runCmd("100")
-        sendEvent(name: "level", value: "100")
-    }
-    else{
-        runCmd(presetLevelString)
-    }
-	sendEvent(name: "switch", value: "on")
-    }
-
-def off(){
-    runCmd("off")
-	sendEvent(name: "switch", value: "off")
-    }
+def off() {
+    log.trace "Executing 'off'"
+    turnOff()
+}
 
 def setLevel(value) {
-//    lastLightLevel = value
-	if (logEnable) log.debug "setLevel >> value: $value"
-	def level = Math.max(Math.min(value as Integer, 100), 0)
-	if (level > 0) {
-		sendEvent(name: "switch", value: "on")
-	}
-    else{
-        runCmd("off")
-		sendEvent(name: "switch", value: "off")
-	}
-    if(level > 0 && level < 25){
+    if (logEnable) log.debug "setLevel value is"
+    if (logEnable) log.debug value
+    log.trace "Executing setLevel $value"
+    Map levelEventMap = buildSetLevelEvent(value)
+    if (levelEventMap.value == 0) {
+        turnOff()
+        // notice that we don't set the level to 0'
+    } else {
+        implicitOn()
+        sendEvent(levelEventMap)
+        setESP8266(value)
+    }
+}
+    
+private Map buildSetLevelEvent(value) {
+    def intValue = value as Integer
+    def newLevel = Math.max(Math.min(intValue, 100), 0)
+    Map eventMap = [name: "level", value: newLevel, unit: "%", isStateChange: true]
+    return eventMap
+}
+
+def setLevel(value, duration) {
+    log.trace "Executing setLevel $value (ignoring duration)"
+    setLevel(value)
+}
+
+private implicitOn() {
+    if (device.currentValue("switch") != "on") {
+        turnOn()
+    }
+}
+
+private turnOn() {
+    sendEvent(name: "switch", value: "on", isStateChange: true)
+    def value = device.currentValue("level")
+    setESP8266(value)
+}
+
+private turnOff() {
+    runCmd("off")
+    sendEvent(name: "switch", value: "off", isStateChange: true)
+}
+
+def installed() {
+    setLevel(100)
+}
+
+def setESP8266(value){
+    if(value > 1 && value < 25){
         runCmd("20")
-		sendEvent(name: "level", value: "20", unit: "%")
-        if (logEnable) log.debug "At 20"
 	}
-    else if(level > 24 && level < 35){
+    else if(value > 24 && value < 35){
         runCmd("30")
-		sendEvent(name: "level", value: "30", unit: "%")
 	}
-	else if(level > 34 && level < 45){
+	else if(value > 34 && value < 45){
         runCmd("40")
-		sendEvent(name: "level", value: "40", unit: "%")
 	}
-    else if(level > 44 && level < 55){
+    else if(value > 44 && value < 55){
         runCmd("50")
-		sendEvent(name: "level", value: "40", unit: "%")
 	}
-    else if(level > 54 && level < 65){
+    else if(value > 54 && value < 65){
         runCmd("60")
-		sendEvent(name: "level", value: "60", unit: "%")
 	}
-    else if(level > 64 && level < 75){
+    else if(value > 64 && value < 75){
         runCmd("70")
-		sendEvent(name: "level", value: "70", unit: "%")
 	}
-    else if(level > 74 && level < 85){
+    else if(value > 74 && value < 85){
         runCmd("80")
-		sendEvent(name: "level", value: "80", unit: "%")
 	}
-    else if(level > 84 && level < 95){
+    else if(value > 84 && value < 95){
         runCmd("90")
-		sendEvent(name: "level", value: "90", unit: "%")
 	}
-    else if(level > 94 ){
+    else if(value > 94 ){
         runCmd("100")
-		sendEvent(name: "level", value: "100", unit: "%")
 	}
 }
 
-def updated() {
-    log.info "updated..."
-    log.warn "debug logging is: ${logEnable == true}"
-    if (logEnable) runIn(1800, logsOff)
-}
-
-def logsOff() {
-    log.warn "debug logging disabled..."
-    device.updateSetting("logEnable", [value: "false", type: "bool"])
-}
-  
 def runCmd(String lightState){
     def postParams = [
             uri: url,
