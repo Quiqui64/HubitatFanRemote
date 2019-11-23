@@ -19,6 +19,7 @@
 #include <Arduino.h> // For RF Tansmitter
 #include <IRremoteESP8266.h> // For RF Tansmitter
 #include <IRsend.h> // For RF Tansmitter
+#include <EEPROM.h>
 
 ESP8266WebServer server;
 const char* ssid = ""; // your router login mame
@@ -29,9 +30,11 @@ const int IRrepeat = 30; // Number times to transmit signal
 
 void setup()
 {
+  Serial.begin(115200);
+  EEPROM.begin(512);
+  setupEEPROM(); // Checks to see if any values are saved to EEPROM
   irsend.begin();// For the RF transmiter
   WiFi.begin(ssid,password);
-  Serial.begin(115200);
   while(WiFi.status()!=WL_CONNECTED)
   {
     Serial.print(".");
@@ -61,6 +64,74 @@ void setup()
 void loop()
 {
   server.handleClient();
+}
+
+// If this is the first time the program has been run it saves all the fan and light variables in the EEPROM to off.
+void setupEEPROM(){
+  if(EEPROM.read(0) == 255){
+    writeString(0, "off");
+    writeString(5, "off");
+    writeString(10, "off");
+    writeString(15, "off");
+    writeString(20, "off");
+    writeString(25, "off");
+    writeString(30, "off");
+    writeString(35, "off");
+    writeString(40, "off");
+    writeString(45, "off");
+    writeString(50, "off");
+    writeString(55, "off");
+    writeString(60, "off");
+    writeString(65, "off");
+    writeString(70, "off");
+    writeString(75, "off");
+    writeString(80, "off");
+    writeString(85, "off");
+    writeString(90, "off");
+    writeString(95, "off");
+    writeString(100, "off");
+    writeString(105, "off");
+    writeString(110, "off");
+    writeString(115, "off");
+    writeString(120, "off");
+    writeString(125, "off");
+    writeString(130, "off");
+    writeString(135, "off");
+    writeString(140, "off");
+    writeString(145, "off");
+    writeString(150, "off");
+    writeString(155, "off");
+  }
+}
+
+void writeString(char add,String data)
+{
+  int _size = data.length();
+  int i;
+  for(i=0;i<_size;i++)
+  {
+    EEPROM.write(add+i,data[i]);
+  }
+  EEPROM.write(add+_size,'\0');   //Add termination null character for String Data
+  EEPROM.commit();
+}
+ 
+ 
+String read_String(char add)
+{
+  int i;
+  char data[100]; //Max 100 Bytes
+  int len=0;
+  unsigned char k;
+  k=EEPROM.read(add);
+  while(k != '\0' && len<500)   //Read until null character
+  {    
+    k=EEPROM.read(add+len);
+    data[len]=k;
+    len++;
+  }
+  data[len]='\0';
+  return String(data);
 }
 
 void sendRAW_Flash(const unsigned int * signalArray, unsigned int signalLength, unsigned char carrierFreq) {
@@ -119,8 +190,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,662,330,662,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,330,663,330,663,10030};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(0);
+  String lastLightState = read_String(5);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -129,6 +200,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(0, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -136,7 +208,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(5, lightState);
+  } 
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -330,9 +403,9 @@ static const unsigned int light100FanLow[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,663,330,330,663,330,663,10033};
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,663,330,663,330,10035};
 
-  server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+    server.send(204,"");
+  String lastFanSpeed = read_String(10);
+  String lastLightState = read_String(15);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -341,6 +414,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(10, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -348,6 +422,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
+    writeString(15, lightState);
   }  
   
   for (int i = 0; i <= IRrepeat; i++) {
@@ -542,8 +617,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,662,330,662,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,330,663,330,663,10043};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(20);
+  String lastLightState = read_String(25);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -552,6 +627,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(20, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -559,6 +635,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
+    writeString(25, lightState);
   }  
   
   for (int i = 0; i <= IRrepeat; i++) {
@@ -753,8 +830,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,663,330,663,330,10027};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(30);
+  String lastLightState = read_String(35);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -763,6 +840,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(30, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -770,6 +848,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
+    writeString(35, lightState);
   }  
   
   for (int i = 0; i <= IRrepeat; i++) {
@@ -964,8 +1043,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,10046};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(40);
+  String lastLightState = read_String(45);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -974,6 +1053,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(40, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -981,6 +1061,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
+    writeString(45, lightState);
   }  
   
   for (int i = 0; i <= IRrepeat; i++) {
@@ -1175,8 +1256,8 @@ static const unsigned int light100FanMed[] PROGMEM = {329,329,663,329,663,329,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,662,330,662,330,662,330,662,662,330,330,662,662,330,330,662,330,662,330,662,330,662,330,662,330,662,662,330,330,662,662,330,330,662,662,330,662,330,662,330,662,330,10042};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(50);
+  String lastLightState = read_String(55);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -1185,6 +1266,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,662,330,662,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(50, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -1192,7 +1274,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,662,330,662,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(55, lightState);
+  } 
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -1386,8 +1469,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,330,663,10055};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(60);
+  String lastLightState = read_String(65);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -1396,6 +1479,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(60, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -1403,7 +1487,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(65, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -1597,8 +1682,8 @@ static const unsigned int light100FanMed[] PROGMEM = {329,329,663,329,663,329,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,663,330,663,330,10047};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(70);
+  String lastLightState = read_String(75);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -1607,6 +1692,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(70, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -1614,7 +1700,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(75, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -1808,8 +1895,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,663,330,330,663,10045};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(80);
+  String lastLightState = read_String(85);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -1818,6 +1905,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(80, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -1825,7 +1913,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(85, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -2019,8 +2108,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,663,330,10040};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(90);
+  String lastLightState = read_String(95);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -2029,6 +2118,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(90, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -2036,7 +2126,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(95, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -2230,8 +2321,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,663,330,330,663,10042};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(100);
+  String lastLightState = read_String(105);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -2240,6 +2331,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(100, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -2247,6 +2339,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
+    writeString(105, lightState);
   }  
   
   for (int i = 0; i <= IRrepeat; i++) {
@@ -2442,8 +2535,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,330,663,330,663,663,330,10045};
  
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(110);
+  String lastLightState = read_String(115);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -2452,6 +2545,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(110, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -2459,7 +2553,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(115, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -2654,8 +2749,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,663,330,330,663,10033};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(120);
+  String lastLightState = read_String(125);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -2664,6 +2759,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(120, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -2671,7 +2767,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(125, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -2865,8 +2962,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,662,330,662,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,663,330,663,330,663,330,330,663,10043};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(130);
+  String lastLightState = read_String(135);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -2875,6 +2972,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(130, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -2882,7 +2980,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(135, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -3077,8 +3176,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,663,330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,663,330,330,663,10050};
 
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(140);
+  String lastLightState = read_String(145);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -3087,6 +3186,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(140, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -3094,7 +3194,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(145, lightState);
+  }
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
@@ -3288,8 +3389,8 @@ static const unsigned int light100FanMed[] PROGMEM = {330,330,663,330,663,330,66
 static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,330,663,663,330,330,663,663,330,330,663,330,663,663,330,330,663,663,330,10038};
   
   server.send(204,"");
-  static String lastFanSpeed = "off";
-  static String lastLightState = "off";  
+  String lastFanSpeed = read_String(150);
+  String lastLightState = read_String(155);  
   String fanSpeed = server.arg("fanSpeed");
   String lightState = server.arg("lightState");
   
@@ -3298,6 +3399,7 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastFanSpeed = fanSpeed;
+    writeString(150, fanSpeed);
   }
   
   if(lightState == "same"){
@@ -3305,7 +3407,8 @@ static const unsigned int light100FanHigh[] PROGMEM = {330,330,663,330,663,330,6
   }
   else{
     lastLightState = lightState;
-  }  
+    writeString(155, lightState);
+  } 
   
   for (int i = 0; i <= IRrepeat; i++) {
      yield(); 
